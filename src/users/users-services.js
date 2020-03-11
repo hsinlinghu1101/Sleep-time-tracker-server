@@ -11,7 +11,7 @@ const UsersService ={
       .then(user => !!user)
   },
 
-  inserUser(db, newUser){
+  insertUser(db, newUser){
     return db
       .insert(newUser)
       .into('sleeptime_users')
@@ -25,7 +25,7 @@ const UsersService ={
     if(password.length > 72){
       return 'Password must be less than 72 character'
     }
-    if(password.startWith(' ') || password.endWith(' ')){
+    if(password.startsWith(' ') || password.endsWith(' ')){
       return 'Password must not start or end with empty space'
     }
     if(!REGEX_UPPER_LOWER_NUMBER_SPECIAL.test(password)){
