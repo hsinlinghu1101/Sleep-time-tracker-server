@@ -7,7 +7,7 @@ const jsonBodyParser= express.json()
 
 const serializeData = data =>({
   id:data.id,
-  date_created: data.date_created,
+  date_created:data.data_created,
   bed_time:data.bed_time,
   wakeup_time:data.wakeup_time,
   user_id:data.user_id
@@ -24,7 +24,7 @@ dataRouter
       .then(data =>{
         if(!data){
           return res.status(404).json({
-            error:{ message: `Comment doesn't exist` }
+            error:{ message: `Data doesn't exist` }
           })
         }
         res.json(serializeData(data))
@@ -33,20 +33,21 @@ dataRouter
       })
      
       .catch(next)
-  })
-  .post(requireAuth, jsonBodyParser, (req, res, next)=>{
-    const {date_created, bed_time, wakeup_time}= req.body;
-    const newData ={date_created, bed_time, wakeup_time}
+  });
 
+  dataRouter
+  .route('/')
+  .post(requireAuth, jsonBodyParser, (req, res, next)=>{
+    const {data_created, bed_time, wakeup_time}= req.body;
+    const newData ={data_created, bed_time, wakeup_time}
     for( const[key, value] of Object.entries(newData))
       if(value == null)
         return res.status(400).json({
           error:`Missing ${key} in request body`
         })
     newData.user_id = req.user.id;
-
     DataService.insertData(
-      req.get.app('db'),
+      req.get('db'),
       newData
     )
       .then(data =>{

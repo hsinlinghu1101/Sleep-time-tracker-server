@@ -13,6 +13,7 @@ const AuthService ={
   },
   createJwt(subject, playload){
     return jwt.sign(playload, config.JWT_SECRET, {
+      subject,
       algorithm:'HS256'
     })
   },
