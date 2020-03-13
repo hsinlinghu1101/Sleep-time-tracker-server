@@ -15,7 +15,7 @@ const serializeData = data =>({
 
 dataRouter
   .use(requireAuth)
-  .route('/:user_id')
+  .route('/my')
   .get((req, res, next) =>{
     DataService.getAllDataByUser(
       req.app.get('db'),
@@ -28,8 +28,11 @@ dataRouter
             error:{ message: `Data doesn't exist` }
           })
         }
-        res.json(serializeData(data))
-        res.data = data;
+        //res.json(serializeData(data))
+        res.json(data);
+        //console.log(data)
+        // res.data = data;
+        //console.log(res.data)
         next();
       })
      
@@ -39,12 +42,12 @@ dataRouter
   dataRouter
   .route('/')
   .post(requireAuth, jsonBodyParser, (req, res, next)=>{
-    const {data_created, bed_time, wakeup_time}= req.body;
+    const {data_created, bed_time, data_wakeup, wakeup_time}= req.body;
     
     const newData ={
       data_created: new Date(`${data_created} 00:00`), 
       bed_time : new Date(`${data_created} ${bed_time}`), 
-      wakeup_time: new Date(`${data_created} ${wakeup_time}`)
+      wakeup_time: new Date(`${data_wakeup} ${wakeup_time}`)
     }
     
     for( const[key, value] of Object.entries(newData))
