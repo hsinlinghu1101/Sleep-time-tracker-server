@@ -15,23 +15,15 @@ const DataService={
       .into('sleeptime_data')
       .returning('*')
       .then(([data]) => data)
-      .then(data =>
-        DataService.getAllDataByUser(db, data.id)
-      );
   },
    
   serializeData(data){
-    const {user} = data;
     return{
       id:data.id,
       data_created:data.data_created,
       bed_time:data.bed_time,
       wakeup_time:data.wakeup_time,
-      user:{
-        id:user.id,
-        user_name:user.user_name,
-        user_age:user.user_age
-      },
+      user_id:data.user_id,
     };
   }
 

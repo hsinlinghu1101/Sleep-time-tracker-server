@@ -14,11 +14,12 @@ const serializeData = data =>({
 });
 
 dataRouter
+  .use(requireAuth)
   .route('/:user_id')
   .get((req, res, next) =>{
     DataService.getAllDataByUser(
       req.app.get('db'),
-      req.params.user_id    
+      req.user.id  
     )
      
       .then(data =>{
@@ -39,7 +40,13 @@ dataRouter
   .route('/')
   .post(requireAuth, jsonBodyParser, (req, res, next)=>{
     const {data_created, bed_time, wakeup_time}= req.body;
-    const newData ={data_created, bed_time, wakeup_time}
+    
+    const newData ={
+      data_created: new Date(`${data_created} 00:00`), 
+      bed_time : new Date(`${data_created} ${bed_time}`), 
+      wakeup_time: new Date(`${data_created} ${wakeup_time}`)
+    }
+    
     for( const[key, value] of Object.entries(newData))
       if(value == null)
         return res.status(400).json({
@@ -47,7 +54,7 @@ dataRouter
         })
     newData.user_id = req.user.id;
     DataService.insertData(
-      req.get('db'),
+      req.app.get('db'),
       newData
     )
       .then(data =>{

@@ -11,6 +11,8 @@ const UsersService ={
       .then(user => !!user)
   },
 
+
+
   insertUser(db, newUser){
     return db
       .insert(newUser)
