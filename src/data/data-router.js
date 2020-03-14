@@ -31,7 +31,7 @@ dataRouter
         //res.json(serializeData(data))
         res.json(data);
         //console.log(data)
-        // res.data = data;
+        //res.data = data;
         //console.log(res.data)
         next();
       })
@@ -39,7 +39,7 @@ dataRouter
       .catch(next)
   });
 
-  dataRouter
+dataRouter
   .route('/')
   .post(requireAuth, jsonBodyParser, (req, res, next)=>{
     const {data_created, bed_time, data_wakeup, wakeup_time}= req.body;

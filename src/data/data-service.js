@@ -5,8 +5,9 @@ const DataService={
     return db
       .from('sleeptime_data')
       .select('*')
-      .where({user_id:id});
-      
+      .leftJoin('sleeptime_users','sleeptime_data.user_id','sleeptime_users.id')
+      //.where({user_id:id});
+      .where('sleeptime_data.user_id', id);    
   },
 
   insertData(db, newData){
@@ -18,6 +19,7 @@ const DataService={
   },
    
   serializeData(data){
+    
     return{
       id:data.id,
       data_created:data.data_created,
