@@ -68,10 +68,10 @@ dataRouter
   });
 dataRouter
   .route('/:dataId')
-  .delete(requireAuth, (res, req, next)=>{
+  .delete(requireAuth, (req, res, next)=>{
     DataService.deleteData(
       req.app.get('db'),
-      req.data.id
+      req.params.dataId
     )
       .then(data =>{
         res.status(204).end()
