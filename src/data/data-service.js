@@ -4,10 +4,23 @@ const DataService={
   getAllDataByUser(db, id){
     return db
       .from('sleeptime_data')
+      .select('sleeptime_data.*', 'sleeptime_users.user_age')
+      .innerJoin('sleeptime_users','sleeptime_data.user_id','sleeptime_users.id')
+      .where('sleeptime_data.user_id', id)   
+    //.where({user_id:id});
+  },
+  getById(db, id){
+    return db
+      .from('sleeptime_data')
       .select('*')
-      .leftJoin('sleeptime_users','sleeptime_data.user_id','sleeptime_users.id')
-      //.where({user_id:id});
-      .where('sleeptime_data.user_id', id);    
+      .where('id', id)
+      .first()
+  },
+  deleteData(db, id){
+    return db
+      .from('sleeptime_data')
+      .where({id})
+      .delete()
   },
 
   insertData(db, newData){
@@ -16,6 +29,11 @@ const DataService={
       .into('sleeptime_data')
       .returning('*')
       .then(([data]) => data)
+  },
+  updateData(db, id, newData){
+    return db('sleeptime_data')
+      .where({id})
+      .update(newData)
   },
    
   serializeData(data){

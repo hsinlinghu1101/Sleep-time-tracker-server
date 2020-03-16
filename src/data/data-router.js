@@ -30,9 +30,7 @@ dataRouter
         }
         //res.json(serializeData(data))
         res.json(data);
-        //console.log(data)
         //res.data = data;
-        //console.log(res.data)
         next();
       })
      
@@ -67,6 +65,20 @@ dataRouter
           .json(DataService.serializeData(data))
       })
       .catch(next)
+  });
+dataRouter
+  .route('/:dataId')
+  .delete(requireAuth, (res, req, next)=>{
+    DataService.deleteData(
+      req.app.get('db'),
+      req.data.id
+    )
+      .then(data =>{
+        res.status(204).end()
+      })
+      .catch(next)
   })
+
+
 
 module.exports = dataRouter;
