@@ -28,43 +28,40 @@ function makeDataArray(users){
   return [
     {
       id:1,
-      data_created: '2020-02-22 19:10:25-07',
-      bed_time:'2020-02-22 11:10:25-07',
-      wakeup_time:'2020-02-23 08:10:25-07',
+      data_created: '2020-02-22T19:10:25.000Z',
+      bed_time:'2020-02-22T11:10:25.000Z',
+      wakeup_time:'2020-02-23T08:10:25.000Z',
       user_id: users[0].id 
     },
     {
       id:2,
-      data_created: '2020-02-22 19:10:25-07',
-      bed_time:'2020-02-22 11:10:25-07',
-      wakeup_time:'2020-02-23 08:10:25-07',
+      data_created: '2020-02-22T19:10:25.000Z',
+      bed_time:'2020-02-22T11:10:25.000Z',
+      wakeup_time:'2020-02-22T08:10:25.000Z',
       user_id: users[1].id 
     },
     {
       id:3,
-      data_created: '2020-02-22 19:10:25-07',
-      bed_time:'2020-02-22 11:10:25-07',
-      wakeup_time:'2020-02-23 08:10:25-07',
+      data_created: '2020-02-22T19:10:25.000Z',
+      bed_time:'2020-02-22T11:10:25.000Z',
+      wakeup_time:'2020-02-23T08:10:25.000Z',
       user_id: users[2].id 
     },
   ]
 }
 
-function makeExpectedData(users, data){
-  users
-    .find(user => user.id === data.user_id)
+function makeExpectedData( data=[]){
+  /*users
+    .find(user => user.id === data.user_id)*/
     
-
+console.log(data)
   return {
     id:data.id,
     data_created:data.data_created,
-    bed_time: data.bed_time,
-    wakeup_time: data.wakeup_time,
-    users:{
-      id:users.id,
-      user_age: users.user_age
-    }
-
+    bed_time:data.bed_time,
+    wakeup_time:data.wakeup_time,
+    user_id:data.user_id,
+    user_age:1
   }
 }
 
@@ -90,6 +87,7 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
   })
   return `Bearer ${token}`
 }
+
 function seedUsers(db, users){
   const preppedUsers = users.map(user =>({
     ...user,

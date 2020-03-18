@@ -64,7 +64,8 @@ dataRouter
           .location(path.posix.join(req.originalUrl, `/${data.id}`))
           .json(DataService.serializeData(data))
       })
-      .catch(next)
+      .catch(next);
+      
   });
 dataRouter
   .route('/:dataId')

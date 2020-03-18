@@ -79,12 +79,12 @@ describe('Data Endpoints', function(){
         return supertest(app)
           .get('/api/data')
           .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-          .expect(200, [])
+          .expect(401)
       })
     })
 
     context(`Given there are data in the database`, ()=>{
-      beforeEach('insert data', () =>
+      beforeEach('give data', () =>
         helpers.seedDataTable(
           db,
           testUsers,
@@ -93,14 +93,15 @@ describe('Data Endpoints', function(){
       );
 
       it(`responds with 200 and all of the data`, ()=>{
-        const expectedData = testData.map(data =>
+        const userData = testData.filter(data => data.user_id === testUsers[0].id)
+        const expectedData = userData.map(data =>
           helpers.makeExpectedData(
-            testUsers,
             data
           )
         )
         return supertest(app)
-          .get(`api/data`)
+          .get(`/api/data/my`)
+          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
           .expect(200, expectedData)
       });
     });
@@ -116,25 +117,23 @@ describe('Data Endpoints', function(){
          this.retries(3)
          const testUser = testUsers[0]
          const newData={
-           data_created:'2020-02-22 19:10:25-07',
-           bed_time:'2020-02-22 19:10:25-07',
-           wakeup_time:'2020-02-22 19:10:25-07'
+           data_created:'2020-02-22',
+           bed_time:'11:10:25',
+           data_wakeup: '2020-02-22',
+           wakeup_time:'08:10:25'
          }
-         return supertext(app)
+         return supertest(app)
           .post('/api/data')
           .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .send(newData)
         .expect(201)
         .expect(res => {
           expect(res.body).to.have.property('id')
-          expect(res.body.data_created).to.eql(newData.data_created)
-          expect(res.body.bed_time).to.eql(newData.bed_time)
-          expect(res.body.wakeup_time).to.eql(newData.wakeup_time)
-          expect(res.body.user.id).to.eql(testUser.id)
-          expect(res.headers.location).to.eql(`/api/data`)
-          const expectedDate = new Date().toLocaleString('en', { timeZone: 'UTC' })
-          const actualDate = new Date(res.body.date_created).toLocaleString()
-          expect(actualDate).to.eql(expectedDate)
+          expect(res.body.data_created).to.eql(`${newData.data_created}T08:00:00.000Z`)
+          expect(res.body.bed_time).to.eql(`2020-02-22T19:10:25.000Z`)
+          expect(res.body.wakeup_time).to.eql(`2020-02-22T16:10:25.000Z`)
+          expect(res.body.user_id).to.eql(testUser.id)
+          expect(res.headers.location).to.eql(`/api/data/${res.body.id}`)
         })
         .expect(res =>
           db
@@ -147,11 +146,36 @@ describe('Data Endpoints', function(){
               expect(row.bed_time).to.eql(newData.bed_time)
               expect(row.wakeup_time).to.eql(newData.wakeup_time)
               expect(row.user_id).to.eql(testUser.id)
-              const expectedDate = new Date().toLocaleString('en', { timeZone: 'UTC' })
-              const actualDate = new Date(row.date_created).toLocaleString()
-              expect(actualDate).to.eql(expectedDate)
             })
         )
      }) 
+  })
+  describe(`DELETE/api/data`, () =>{
+    context('Given ther are data in database', ()=>{
+      const testData = helpers.makeDataArray(testUsers)
+     
+      beforeEach('insert data', ()=>{
+        helpers.seedDataTable(
+          db,
+          testUsers,
+          testData
+        )
+      })
+      it('responds with 204 and removes the data', ()=>{
+         const idToRemove =2
+         const expectedData = testData.filter(data => data.id !== idToRemove)
+         return supertest(app)
+           .delete(`/api/data/${idToRemove}`)
+           .set('Authorization', helpers.makeAuthHeader(testUsers[1]))
+           .expect(204)
+           .then(res => 
+              supertest(app)
+                 .get(`/api/data`)
+                 .set('Authorization', helpers.makeAuthHeader(testUsers[1]))
+                 .expect({})
+            )
+
+      })
+    })
   })
 });
