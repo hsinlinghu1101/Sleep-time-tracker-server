@@ -83,6 +83,13 @@ function cleanTables(db){
   )
 }
 
+function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
+  const token = jwt.sign({ user_id: user.id}, secret, {
+     subject: user.user_name,
+     algorithm: 'HS256'
+  })
+  return `Bearer ${token}`
+}
 function seedUsers(db, users){
   const preppedUsers = users.map(user =>({
     ...user,
@@ -115,6 +122,7 @@ module.exports={
   makeDataFixtures,
   cleanTables,
   seedDataTable,
-  seedUsers
+  seedUsers,
+  makeAuthHeader
 }
 

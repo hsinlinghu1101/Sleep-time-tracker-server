@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 
-describe.only('Auth Endpoints', function(){
+describe('Auth Endpoints', function(){
   let db;
 
   const { testUsers } = helpers.makeDataFixtures();
@@ -38,7 +38,7 @@ describe.only('Auth Endpoints', function(){
 
       it(`responds with 400 required error when '${field}' is missing`, ()=> {
         delete loginAttemptBody [field]
-        
+
         return supertest(app)
           .post('/api/auth/login')
           .send(loginAttemptBody)
@@ -85,7 +85,8 @@ describe.only('Auth Endpoints', function(){
         .post('/api/auth/login')
         .send(userValidCreds)
         .expect(200, {
-          authToken:expectedToken
+          authToken:expectedToken,
+          user_id:testUser.id
         })
     })
     
