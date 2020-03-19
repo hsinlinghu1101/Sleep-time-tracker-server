@@ -155,7 +155,7 @@ describe('Data Endpoints', function(){
       const testData = helpers.makeDataArray(testUsers)
      
       beforeEach('insert data', ()=>{
-        helpers.seedDataTable(
+      return  helpers.seedDataTable(
           db,
           testUsers,
           testData
@@ -170,9 +170,9 @@ describe('Data Endpoints', function(){
            .expect(204)
            .then(res => 
               supertest(app)
-                 .get(`/api/data`)
+                 .get(`/api/data/my`)
                  .set('Authorization', helpers.makeAuthHeader(testUsers[1]))
-                 .expect({})
+                 .expect([])
             )
 
       })
