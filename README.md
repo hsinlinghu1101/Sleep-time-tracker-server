@@ -19,6 +19,7 @@ Login user account. Requires a request body
   Location: https://git.heroku.com/safe-lowlands-14338.git/api/auth/login
   
   {
+    
     "id": "1",
     
     "user_name": "Demo",
