@@ -1,6 +1,6 @@
 Sleep Time Tracker
 
-Link to live app: https://build-five-alpha.now.sh/
+Link to heroku server: https://safe-lowlands-14338.herokuapp.com/api
 
 Documentation of your API.
 
@@ -80,10 +80,9 @@ Example request/response:
   HTTP STATUS 204 No Content
   {} (empty)
 
-Screenshot(s) of your app. This makes your app description much easier to understand.
 
-
-A summary section. This should have a concise explanation of what your app does. Try to frame this from the standpoint of what the user does, or what the app enables for the user.
  
  Technology used -
  React, CSS, Node, Express, and PostgreSQL.
+
+ 
