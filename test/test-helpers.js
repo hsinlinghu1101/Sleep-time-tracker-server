@@ -51,8 +51,6 @@ function makeDataArray(users){
 }
 
 function makeExpectedData( data=[]){
-  /*users
-    .find(user => user.id === data.user_id)*/
     
 console.log(data)
   return {

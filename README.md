@@ -1,26 +1,89 @@
-# Express Boilerplate!
+Sleep Time Tracker
 
-This is a boilerplate project used for starting new projects!
+Link to live app: https://build-five-alpha.now.sh/
 
-## Set up
+Documentation of your API.
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+POST/api/auth/login
+Login user account. Requires a request body
+ POST https://git.heroku.com/safe-lowlands-14338.git/api/auth/login
+  REQ BODY: { "user_name": "Demo", "Password": "Demopass123!" }
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+  HTTP STATUS 201 Created
+  Location: https://git.heroku.com/safe-lowlands-14338.git/api/auth/login
+  {
+    "id": "1",
+    "user_name": "Demo",
+    "Password": "Demopass123!"
+  }
+POST/api/user
+Create a new user account. Requires a request body.
+ POST https://git.heroku.com/safe-lowlands-14338.git/api/user
+  REQ BODY: { "user_name": "Demo", "user_age": "1" , "password":"Demopass123!"}
 
-## Scripts
+  HTTP STATUS 201 Created
+  Location: https://git.heroku.com/safe-lowlands-14338.git/api/user
+  { 
+    "id":"1",
+    "user_name": "Demo",
+    "user_age": "1",
+    "password":"Demopass123!"
+  }
+GET/api/data/my
+Provides array of all data object of the user.
+GET https://git.heroku.com/safe-lowlands-14338.git/api/data/my
 
-Start the application `npm start`
+  HTTP STATUS 200 OK
+  [{
+    "id":'1',
+    'data_created':'2020-02-22 19:10:25-07',
+    'bed_time':'2020-02-22 19:10:25-07',
+    'wakeup_time':'2020-02-22 19:10:25-07',
+    'user_id':'1',
+    'user_age':'1',
+  },
+    {
+      'id':'2',
+    'data_created':'2020-02-22 19:10:25-07',
+    'bed_time':'2020-02-22 19:10:25-07',
+    'wakeup_time':'2020-02-22 19:10:25-07',
+    'user_id':'1',
+    'user_age':'1'
+    }
+  ]
 
-Start nodemon for the application `npm run dev`
+POST/api/data
+Create a new data. Requires a request body.
+POST https://git.heroku.com/safe-lowlands-14338.git/api/data
+  REQ BODY: { 
+  "data_created": "2020-02-22 19:10:25-07", 
+  "bed_time": "2020-02-22 19:10:25-07",
+  "data_wakeup": "2020-02-22 19:10:25-07",
+  "wakeup_time": "2020-02-22 19:10:25-07"
+   }
 
-Run the tests `npm test`
+  HTTP STATUS 201 Created
+  Location: https://git.heroku.com/safe-lowlands-14338.git/api/data
+  {
+    "data_created": "2020-02-22 19:10:25-07",
+    "bed_time": "2020-02-22 19:10:25-07",
+    "data_wakeup": "2020-02-22 19:10:25-07",
+    "wakeup_time": "2020-02-22 19:10:25-07"
+  }
 
-## Deploying
+DELETE/api/data/:dataId
+Deletes data matching id parameter from the user.
+Example request/response:
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+  DELETE https://git.heroku.com/safe-lowlands-14338.git/api/data/1
+    
+  HTTP STATUS 204 No Content
+  {} (empty)
+
+Screenshot(s) of your app. This makes your app description much easier to understand.
+
+
+A summary section. This should have a concise explanation of what your app does. Try to frame this from the standpoint of what the user does, or what the app enables for the user.
+ 
+ Technology used -
+ React, CSS, Node, Express, and PostgreSQL.
