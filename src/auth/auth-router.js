@@ -6,7 +6,7 @@ const AuthService = require('./auth-service');
 authRouter
   .post('/login', jsonBodyParser, (req, res, next)=>{
     const { user_name, password}=req.body;
-    const loginUser ={user_name, password}
+    const loginUser ={user_name, password};
 
     for(const[key, value] of Object.entries(loginUser))
       if(value == null)
@@ -22,22 +22,23 @@ authRouter
         if(!dbUser)
           return res.status(400).json({
             error:'Incorrect user_name or password'
-          })
+          });
         return AuthService.comparePasswords(loginUser.password, dbUser.password)
           .then(compareMatch =>{
             if(!compareMatch)
               return res.status(400).json({
                 error:'Incorrect user_name or password',
-              })
+              });
             const sub =dbUser.user_name;
-            const payload = {user_id: dbUser.id}
+            const payload = {user_id: dbUser.id};
+            //The client can then use the JWT for every request to protected endpoints
             res.send({
               authToken:AuthService.createJwt(sub, payload),
               user_id : dbUser.id
-            })
-          })
+            });
+          });
       })
-      .catch(next)
-  })
+      .catch(next);
+  });
 
-  module.exports = authRouter;
+module.exports = authRouter;

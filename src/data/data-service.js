@@ -1,26 +1,32 @@
-
+const knex = require('knex');
 
 const DataService={
+  hasDataAlready(db, data_created){
+    return db('sleeptime_data')
+      .where(knex.raw('DATE(data_created)=?', data_created))
+      .first()
+      .then(data => !!data);
+  },
+ 
   getAllDataByUser(db, id){
     return db
       .from('sleeptime_data')
       .select('sleeptime_data.*', 'sleeptime_users.user_age')
       .innerJoin('sleeptime_users','sleeptime_data.user_id','sleeptime_users.id')
-      .where('sleeptime_data.user_id', id)   
-    //.where({user_id:id});
+      .where('sleeptime_data.user_id', id);   
   },
   getById(db, id){
     return db
       .from('sleeptime_data')
       .select('*')
       .where('id', id)
-      .first()
+      .first();
   },
   deleteData(db, id){
     return db
       .from('sleeptime_data')
       .where({id})
-      .delete()
+      .delete();
   },
 
   insertData(db, newData){
@@ -28,12 +34,13 @@ const DataService={
       .insert(newData)
       .into('sleeptime_data')
       .returning('*')
-      .then(([data]) => data)
+      .then(([data]) => data);
   },
+  
   updateData(db, id, newData){
     return db('sleeptime_data')
       .where({id})
-      .update(newData)
+      .update(newData);
   },
    
   serializeData(data){

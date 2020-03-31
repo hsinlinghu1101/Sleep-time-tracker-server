@@ -1,9 +1,9 @@
 const express =require('express');
 const path = require('path');
 const dataRouter = express.Router();
-const { requireAuth } = require('../middleware/jwt-auth')
+const { requireAuth } = require('../middleware/jwt-auth');
 const DataService = require('./data-service');
-const jsonBodyParser= express.json()
+const jsonBodyParser= express.json();
 
 const serializeData = data =>({
   id:data.id,
@@ -26,15 +26,15 @@ dataRouter
         if(!data){
           return res.status(404).json({
             error:{ message: `Data doesn't exist` }
-          })
+          });
         }
-        //res.json(serializeData(data))
+        
         res.json(data);
-        //res.data = data;
+        
         next();
       })
      
-      .catch(next)
+      .catch(next);
   });
 
 dataRouter
@@ -46,23 +46,35 @@ dataRouter
       data_created: new Date(`${data_created} 00:00`), 
       bed_time : new Date(`${data_created} ${bed_time}`), 
       wakeup_time: new Date(`${data_wakeup} ${wakeup_time}`)
-    }
+    };
     
     for( const[key, value] of Object.entries(newData))
       if(value == null)
         return res.status(400).json({
           error:`Missing ${key} in request body`
-        })
+        });
     newData.user_id = req.user.id;
-    DataService.insertData(
+
+    //data_created should be unique
+    DataService.hasDataAlready(
       req.app.get('db'),
-      newData
+      data_created
     )
-      .then(data =>{
-        res
-          .status(201)
-          .location(path.posix.join(req.originalUrl, `/${data.id}`))
-          .json(DataService.serializeData(data))
+      .then(hasDataAlready =>{
+        if(hasDataAlready)
+        
+          return res.status(400).json({error: 'Date already taken'});
+        
+        DataService.insertData(
+          req.app.get('db'),
+          newData
+        )
+          .then(data =>{
+            res
+              .status(201)
+              .location(path.posix.join(req.originalUrl, `/${data.id}`))
+              .json(DataService.serializeData(data));
+          })
       })
       .catch(next);
       
@@ -75,10 +87,10 @@ dataRouter
       req.params.dataId
     )
       .then(data =>{
-        res.status(204).end()
+        res.status(204).end();
       })
-      .catch(next)
-  })
+      .catch(next);
+  });
 
 
 
