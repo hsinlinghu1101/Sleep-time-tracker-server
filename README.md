@@ -191,11 +191,6 @@ Features:
 
 -allow for users to delete their record
  
- Technology used -
- React, CSS, Node, Express, and PostgreSQL.
-
- 
-
 
  Technology used -
  
