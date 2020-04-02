@@ -4,7 +4,7 @@ const DataService={
   hasDataAlready(db, data_created, id){
     return db('sleeptime_data')
       .where(knex.raw('DATE(data_created)=?', data_created))
-      .andwhere({user_id:id})
+      .where({user_id:id})
       .first()
       .then(data => !!data);
   },
