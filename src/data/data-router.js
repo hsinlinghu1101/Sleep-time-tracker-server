@@ -58,7 +58,8 @@ dataRouter
     //data_created should be unique
     DataService.hasDataAlready(
       req.app.get('db'),
-      data_created
+      data_created,
+      req.user.id
     )
       .then(hasDataAlready =>{
         if(hasDataAlready)
