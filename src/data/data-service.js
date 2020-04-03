@@ -1,6 +1,7 @@
 const knex = require('knex');
 
 const DataService={
+  //Each user can't choose the same date twice  
   hasDataAlready(db, data_created, id){
     return db('sleeptime_data')
       .where(knex.raw('DATE(data_created)=?', data_created))

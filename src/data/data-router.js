@@ -75,7 +75,7 @@ dataRouter
               .status(201)
               .location(path.posix.join(req.originalUrl, `/${data.id}`))
               .json(DataService.serializeData(data));
-          })
+          });
       })
       .catch(next);
       
